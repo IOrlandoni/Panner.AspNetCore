@@ -2,6 +2,8 @@ name: test-and-report.yml
 on:
   pull_request:
   push:
+    branches:
+      - 'main'
     paths:
       - 'samples/**'
       - 'src/**'
@@ -15,11 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check-out
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
       - name: Install Dotnet
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.x
+          dotnet-version: |
+            8.x
+            9.x
       - name: Install ReportGenerator
         run: dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools
       - name: Test
