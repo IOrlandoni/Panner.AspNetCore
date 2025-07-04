@@ -1,0 +1,6 @@
+@WebApi8ControllersFluent_HostAddress = http://localhost:5274
+
+GET {{WebApi8ControllersFluent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

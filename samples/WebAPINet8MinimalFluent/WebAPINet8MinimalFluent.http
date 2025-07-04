@@ -1,0 +1,6 @@
+@WebAPINet8MinimalFluent_HostAddress = http://localhost:5277
+
+GET {{WebAPINet8MinimalFluent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
