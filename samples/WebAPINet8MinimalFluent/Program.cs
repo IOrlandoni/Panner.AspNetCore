@@ -44,7 +44,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/posts", async ([FromServices] BlogContext blogContext, [FromQuery] IReadOnlyCollection<ISortParticle<Post>> sorts, [FromQuery] IReadOnlyCollection<IFilterParticle<Post>> filters) =>
+app.MapGet("/posts", async (
+    [FromServices] BlogContext blogContext,
+    SortParticles<Post> sorts,
+    FilterParticles<Post> filters) =>
 {
     blogContext.Database.EnsureCreated();
     var result = await blogContext.Posts
