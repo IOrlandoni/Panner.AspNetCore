@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Panner;
+using Panner.AspNetCore;
 using Panner.AspNetCore.Samples.WebApiNet8MinimalFluent.EFModel;
 using Panner.AspNetCore.Samples.WebApiNet8MinimalFluent.PannerExtensions;
+using Views = Panner.AspNetCore.Samples.WebApiNet8MinimalFluent.Views;
 using Panner.Builders;
 
 var builder = WebApplication.CreateBuilder(args);

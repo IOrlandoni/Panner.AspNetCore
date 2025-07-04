@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Panner;
+using Panner.AspNetCore;
 using Panner.AspNetCore.Samples.WebApiNet9MinimalFluent.EFModel;
 using Panner.AspNetCore.Samples.WebApiNet9MinimalFluent.PannerExtensions;
+using Views = Panner.AspNetCore.Samples.WebApiNet9MinimalFluent.Views;
 using Panner.Builders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +42,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/posts", async ([FromServices] BlogContext blogContext, [FromQuery] IReadOnlyCollection<ISortParticle<Post>> sorts, [FromQuery] IReadOnlyCollection<IFilterParticle<Post>> filters) =>
+app.MapGet("/posts", async (
+    [FromServices] BlogContext blogContext, 
+    [FromQuery] IReadOnlyCollection<ISortParticle<Post>> sorts, 
+    [FromQuery] IReadOnlyCollection<IFilterParticle<Post>> filters
+) =>
 {
     blogContext.Database.EnsureCreated();
     var result = await blogContext.Posts

@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Panner;
 using Panner.AspNetCore.Samples.FastEndpointsNet9.EFModel;
+using Views = Panner.AspNetCore.Samples.FastEndpointsNet9.Views;
 using Panner.AspNetCore.Samples.FastEndpointsNet9.PannerExtensions;
 
 namespace Posts;

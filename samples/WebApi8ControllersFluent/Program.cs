@@ -1,7 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Panner.AspNetCore;
 using Panner.AspNetCore.Samples.WebApi8ControllersFluent.EFModel;
 using Panner.AspNetCore.Samples.WebApi8ControllersFluent.PannerExtensions;
+using Views = Panner.AspNetCore.Samples.WebApi8ControllersFluent.Views;
 using Panner.Builders;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

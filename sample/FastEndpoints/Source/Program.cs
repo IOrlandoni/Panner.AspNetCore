@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Panner.AspNetCore;
+using Panner.AspNetCore.Samples.FastEndpointsNet9;
 using Panner.AspNetCore.Samples.FastEndpointsNet9.EFModel;
 using Panner.AspNetCore.Samples.FastEndpointsNet9.PannerExtensions;
+using Views = Panner.AspNetCore.Samples.FastEndpointsNet9.Views;
 using Panner.Builders;
 
 var bld = WebApplication.CreateBuilder(args);
@@ -35,7 +38,6 @@ app.UseAuthentication()
     .UseAuthorization()
     .UseFastEndpoints(c =>
     {
-        c.Binding.ReflectionCache.AddFromFastEndpoints();
         c.Errors.UseProblemDetails();
     })
     .UseSwaggerGen();

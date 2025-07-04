@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+
 using Panner;
 using Panner.AspNetCore.Samples.FastEndpointsNet9.EFModel;
+using FastEndpoints;
 
 namespace Posts;
 
 sealed class Request
 {
-    [FromQuery]
+    [FastEndpoints.FromQuery]
     public IReadOnlyCollection<ISortParticle<Post>>? Sorts { get; set; }
 
-    [FromQuery]
+    [FastEndpoints.FromQuery]
     public IReadOnlyCollection<IFilterParticle<Post>>? Filters { get; set; }
 }
