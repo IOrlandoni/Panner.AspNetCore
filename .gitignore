@@ -3,3 +3,5 @@
 [Bb]in/
 [Tt]est[Rr]esults/
 nupkgs/
+.idea/
+.editorconfig
