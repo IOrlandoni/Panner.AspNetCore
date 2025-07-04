@@ -1,12 +1,37 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Panner.AspNetCore.Samples.WebApiNet9MinimalFluent.EFModel;
+using Panner.AspNetCore.Samples.WebApiNet9MinimalFluent.PannerExtensions;
+using Panner.Builders;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.UsePanner(c =>
+{
+    c.Entity<Post>()
+        .IsSortableByPopularity()
+        .Property(x => x.Id, o => o
+            .IsSortableAs(nameof(Views.Post.Id))
+            .IsFilterableAs(nameof(Views.Post.Id))
+        )
+        .Property(x => x.Title, o => o
+            .IsSortableAs(nameof(Views.Post.Title))
+        )
+        .Property(x => x.CreatedOn, o => o
+            .IsSortableAs(nameof(Views.Post.Creation))
+            .IsFilterableAs(nameof(Views.Post.Creation))
+        );
+});
+
+builder.Services.AddDbContext<BlogContext>(options =>
+{
+    options.UseInMemoryDatabase("BlogDb");
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -14,28 +39,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/posts", async ([FromServices] BlogContext blogContext, [FromQuery] IReadOnlyCollection<ISortParticle<Post>> sorts, [FromQuery] IReadOnlyCollection<IFilterParticle<Post>> filters) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+    blogContext.Database.EnsureCreated();
+    var result = await blogContext.Posts
+        .Apply(filters)
+        .Apply(sorts)
+        .Select(x => new Views.Post
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Content = x.Content,
+            Creation = x.CreatedOn
+        })
+        .ToArrayAsync();
+    return Results.Ok(result);
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

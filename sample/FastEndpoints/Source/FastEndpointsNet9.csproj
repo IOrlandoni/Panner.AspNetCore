@@ -11,11 +11,17 @@
         <RootNamespace>Panner.AspNetCore.Samples.FastEndpointsNet9</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="FastEndpoints" Version="6.0.0"/>
-        <PackageReference Include="FastEndpoints.Generator" Version="6.0.0" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"/>
-        <PackageReference Include="FastEndpoints.Security" Version="6.0.0"/>
-        <PackageReference Include="FastEndpoints.Swagger" Version="6.0.0"/>
-    </ItemGroup>
+  <ItemGroup>
+      <PackageReference Include="FastEndpoints" Version="6.0.0" />
+      <PackageReference Include="FastEndpoints.Generator" Version="6.0.0" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
+      <PackageReference Include="FastEndpoints.Security" Version="6.0.0" />
+      <PackageReference Include="FastEndpoints.Swagger" Version="6.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Panner.AspNetCore.csproj" />
+  </ItemGroup>
 
 </Project>

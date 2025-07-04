@@ -1,21 +1,43 @@
+using Microsoft.EntityFrameworkCore;
+using Panner.AspNetCore.Samples.WebApiNet9ControllersFluent.EFModel;
+using Panner.AspNetCore.Samples.WebApiNet9ControllersFluent.PannerExtensions;
+using Panner.Builders;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.UsePanner(c =>
+{
+    c.Entity<Post>()
+        .IsSortableByPopularity()
+        .Property(x => x.Id, o => o
+            .IsSortableAs(nameof(Views.Post.Id))
+            .IsFilterableAs(nameof(Views.Post.Id))
+        )
+        .Property(x => x.Title, o => o
+            .IsSortableAs(nameof(Views.Post.Title))
+        )
+        .Property(x => x.CreatedOn, o => o
+            .IsSortableAs(nameof(Views.Post.Creation))
+            .IsFilterableAs(nameof(Views.Post.Creation))
+        );
+});
+
+builder.Services.AddDbContext<BlogContext>(options =>
+{
+    options.UseInMemoryDatabase("BlogDb");
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
