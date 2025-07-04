@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace Panner.AspNetCore
 {
-    public sealed class SortParticles<TEntity> : IReadOnlyCollection<ISortParticle<TEntity>>
+    public sealed class SortParticlesMinimalBinder<TEntity> : IReadOnlyCollection<ISortParticle<TEntity>>
         where TEntity : class
     {
         private readonly IReadOnlyCollection<ISortParticle<TEntity>> _particles;
 
-        private SortParticles(IReadOnlyCollection<ISortParticle<TEntity>> particles)
+        private SortParticlesMinimalBinder(IReadOnlyCollection<ISortParticle<TEntity>> particles)
         {
             _particles = particles;
         }
 
-        public static ValueTask<SortParticles<TEntity>> BindAsync(HttpContext context, ParameterInfo parameter)
+        public static ValueTask<SortParticlesMinimalBinder<TEntity>> BindAsync(HttpContext context, ParameterInfo parameter)
         {
             if (context == null)
             {
@@ -38,7 +38,7 @@ namespace Panner.AspNetCore
 
             if (StringValues.IsNullOrEmpty(value))
             {
-                return ValueTask.FromResult(new SortParticles<TEntity>(Array.Empty<ISortParticle<TEntity>>()));
+                return ValueTask.FromResult(new SortParticlesMinimalBinder<TEntity>(Array.Empty<ISortParticle<TEntity>>()));
             }
 
             if (!pContext.TryParseCsv(value.ToString(), out IEnumerable<ISortParticle<TEntity>> particles))
@@ -46,7 +46,7 @@ namespace Panner.AspNetCore
                 throw new InvalidOperationException("Could not parse provided sorts.");
             }
 
-            return ValueTask.FromResult(new SortParticles<TEntity>(particles.ToArray()));
+            return ValueTask.FromResult(new SortParticlesMinimalBinder<TEntity>(particles.ToArray()));
         }
 
         public int Count => _particles.Count;

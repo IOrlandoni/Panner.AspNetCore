@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace Panner.AspNetCore
 {
-    public sealed class FilterParticles<TEntity> : IReadOnlyCollection<IFilterParticle<TEntity>>
+    public sealed class FilterParticlesMinimalBinder<TEntity> : IReadOnlyCollection<IFilterParticle<TEntity>>
         where TEntity : class
     {
         private readonly IReadOnlyCollection<IFilterParticle<TEntity>> _particles;
 
-        private FilterParticles(IReadOnlyCollection<IFilterParticle<TEntity>> particles)
+        private FilterParticlesMinimalBinder(IReadOnlyCollection<IFilterParticle<TEntity>> particles)
         {
             _particles = particles;
         }
 
-        public static ValueTask<FilterParticles<TEntity>> BindAsync(HttpContext context, ParameterInfo parameter)
+        public static ValueTask<FilterParticlesMinimalBinder<TEntity>> BindAsync(HttpContext context, ParameterInfo parameter)
         {
             if (context == null)
             {
@@ -38,7 +38,7 @@ namespace Panner.AspNetCore
 
             if (StringValues.IsNullOrEmpty(value))
             {
-                return ValueTask.FromResult(new FilterParticles<TEntity>(Array.Empty<IFilterParticle<TEntity>>()));
+                return ValueTask.FromResult(new FilterParticlesMinimalBinder<TEntity>(Array.Empty<IFilterParticle<TEntity>>()));
             }
 
             if (!pContext.TryParseCsv(value.ToString(), out IEnumerable<IFilterParticle<TEntity>> particles))
@@ -46,7 +46,7 @@ namespace Panner.AspNetCore
                 throw new InvalidOperationException("Could not parse provided filters.");
             }
 
-            return ValueTask.FromResult(new FilterParticles<TEntity>(particles.ToArray()));
+            return ValueTask.FromResult(new FilterParticlesMinimalBinder<TEntity>(particles.ToArray()));
         }
 
         public int Count => _particles.Count;
