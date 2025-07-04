@@ -29,7 +29,7 @@ jobs:
       - name: Test
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=lcov
       - name: Generate Coverage Report
-        run: tools/reportgenerator "-reports:tests/**/coverage.info" "-targetdir:./coverage/" -reporttypes:lcov
+        run: tools/reportgenerator "-reports:tests/**/coverage.*.info" "-targetdir:./coverage/" -reporttypes:lcov
       - name: Upload to Coveralls
         uses: coverallsapp/github-action@master
         with:
