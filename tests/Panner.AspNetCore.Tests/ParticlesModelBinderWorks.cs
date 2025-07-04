@@ -41,13 +41,13 @@
         }
 
         [Fact]
-        public void NullBindingContextThrows()
+        public async Task NullBindingContextThrows()
         {
             var x = Create(GetPannerContext());
 
-            Assert.Throws<ArgumentNullException>(() =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
             {
-                x.BindModelAsync(null);
+                await x.BindModelAsync(null);
             });
         }
 
